@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace GuessingGame.Core {
+    [Serializable]
     public class Subject {
-        public string Name { get; }
+        [XmlAttribute]
+        public string Name { get; set; }
         public HashSet<Trait> Traits { get; }
+
+        private Subject() {
+            Traits = new HashSet<Trait>();
+        }
 
         public Subject(string name) {
             Name = name ?? throw new ArgumentNullException(nameof(name));

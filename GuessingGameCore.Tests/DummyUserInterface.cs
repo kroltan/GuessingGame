@@ -2,16 +2,13 @@
 using GuessingGame.Core.Gameplay;
 
 namespace GuessingGame.Core.Tests {
-    class TestUserInterface : IUserInterface {
-        public bool Confirmed;
-        public string Response;
-
+    class DummyUserInterface : IUserInterface {
         public Task<bool> Confirmation(string message) {
-            return Task.FromResult(Confirmed);
+            return Task.FromResult(true);
         }
 
         public Task<string> Input(string question) {
-			return Task.FromResult(Response);
+			return Task.FromResult("");
 		}
     }
 }

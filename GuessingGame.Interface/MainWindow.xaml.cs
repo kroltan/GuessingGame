@@ -1,22 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Xml;
+using System.Xml.Serialization;
 using GuessingGame.Core;
 using GuessingGame.Core.Gameplay;
 
 namespace GuessingGame.Interface {
 	public partial class MainWindow : Window, IUserInterface {
+		private const string StoredSolverWorldDataFilename = "Solver.xml";
+
 		public MainWindow() {
 			InitializeComponent();
-
-			var solver = new SolverWorld();
-			var shark = new Subject("shark");
-			shark.Traits.Add(new Trait("lives in water"));
-			var monkey = new Subject("monkey");
-			solver.Insert(shark);
-			solver.Insert(monkey);
-
-			var game = new Game(solver, this);
-			RunGamesUntilExit(game);
+			InitializeGame();
 		}
 
 		public Task<bool> Confirmation(string message) {
@@ -53,7 +51,14 @@ namespace GuessingGame.Interface {
 			return source.Task;
 		}
 
-		private async void RunGamesUntilExit(Game game) {
+		private async void InitializeGame() {
+			var solver = await LoadStoredWorld();
+			var game = new Game(solver, this);
+
+			await RunGamesUntilExit(game);
+		}
+
+		private async Task RunGamesUntilExit(Game game) {
 			try {
 				while (true) {
 					await game.Run();
@@ -61,6 +66,28 @@ namespace GuessingGame.Interface {
 			} catch (TaskCanceledException) {
 				Close();
 			}
+		}
+
+		private Task<SolverWorld> LoadStoredWorld() {
+			var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+
+			if (directory == null) {
+				throw new DirectoryNotFoundException("The application's directory could not be located");
+			}
+
+			var path = Path.Combine(directory, StoredSolverWorldDataFilename);
+
+			return Task.Run(() => {
+				var serializer = new XmlSerializer(typeof(SolverWorld));
+				var settings = new XmlReaderSettings {
+				};
+
+				using (var reader = File.OpenRead(path)) {
+					using (var xml = XmlReader.Create(reader, settings)) {
+						return (SolverWorld) serializer.Deserialize(xml);
+					}
+				}
+			});
 		}
 	}
 }

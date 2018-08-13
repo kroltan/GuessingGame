@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using GuessingGame.Core.Gameplay;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -11,7 +8,7 @@ namespace GuessingGame.Core.Tests {
         [TestMethod]
         public void Game_WithParameters_StoresInContext() {
             var solver = new SolverWorld();
-            var ui = new TestUserInterface();
+            var ui = new DummyUserInterface();
             var game = new Game(solver, ui);
 
             Assert.Equals(game.Solver, solver);
@@ -20,7 +17,7 @@ namespace GuessingGame.Core.Tests {
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void Game_WithoutSolver_Fails() {
-            var ui = new TestUserInterface();
+            var ui = new DummyUserInterface();
             var _ = new Game(null, ui);
 		}
 
@@ -29,5 +26,7 @@ namespace GuessingGame.Core.Tests {
             var solver = new SolverWorld();
             var _ = new Game(solver, null);
         }
+
+        // TODO: Figure out how to test state machine.
 	}
 }

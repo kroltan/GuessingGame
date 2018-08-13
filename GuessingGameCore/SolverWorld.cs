@@ -4,16 +4,14 @@ using System.Collections.Generic;
 namespace GuessingGame.Core {
     [Serializable]
     public class SolverWorld {
-        private readonly HashSet<Subject> _subjects = new HashSet<Subject>();
-
-        public IReadOnlyCollection<Subject> Subjects => _subjects;
+        public HashSet<Subject> Subjects { get; private set; } = new HashSet<Subject>();
 
         public void Insert(Subject subject) {
             if (subject == null) {
                 throw new ArgumentNullException(nameof(subject));
             }
 
-            _subjects.Add(subject);
+            Subjects.Add(subject);
         }
     }
 }
