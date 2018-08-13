@@ -22,6 +22,7 @@ namespace GuessingGame.Interface {
 
 		public PromptPage() {
 			InitializeComponent();
+			Answer.Focus();
 		}
 
 		private void Submit_OnClick(object sender, RoutedEventArgs e) {

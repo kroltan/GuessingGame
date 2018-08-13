@@ -25,6 +25,7 @@
                  Grid.Row="2" />
         <Button Content="Submit"
                 Click="Submit_OnClick"
+                IsDefault="True"
                 Grid.Row="4" />
     </Grid>
 </Page>

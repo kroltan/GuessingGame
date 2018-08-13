@@ -26,10 +26,12 @@
                    TextWrapping="Wrap" />
         <Button Content="Yes"
                 Click="Yes_OnClick"
+                IsDefault="True"
                 Grid.Row="1"
                 Margin="0,0,10,0"/>
         <Button Content="No"
                 Click="No_OnClick"
+                IsCancel="True"
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="10,0,0,0"/>
